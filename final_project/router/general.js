@@ -33,7 +33,7 @@ public_users.get("/author/:author", (req, res) => {
     const matchingBooks = matchingKeys.reduce((acc, key) => books[key], []);
 
     if (!matchingBooks) {
-        return res.status(404).send(`Book with author ${author} not found.`);
+        return res.status(404).send(`Books with author ${author} not found.`);
     }
 
     return res.status(200).send(JSON.stringify(matchingBooks));
@@ -41,8 +41,15 @@ public_users.get("/author/:author", (req, res) => {
 
 // Get all books based on title
 public_users.get("/title/:title", (req, res) => {
-    //Write your code here
-    return res.status(300).json({ message: "Yet to be implemented" });
+    const title = req.params.title;
+    const matchingKeys = Object.keys(books).filter(key => books[key].title === title);
+    const matchingBooks = matchingKeys.reduce((acc, key) => books[key], []);
+
+    if (!matchingBooks) {
+        return res.status(404).send(`Books with title ${title} not found.`);
+    }
+
+    return res.status(200).send(JSON.stringify(matchingBooks));
 });
 
 //  Get book review

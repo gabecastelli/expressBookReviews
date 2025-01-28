@@ -1,10 +1,10 @@
-import { express } from "express";
-import { jwt } from "jsonwebtoken";
-import { session } from "express-session";
-import { users, authenticated as customer_routes } from "./router/auth_users";
-import { general as genl_routes } from "./router/general";
+import express from "express";
+import jwt from "jsonwebtoken";
+import session from "express-session";
+import { users, regd_users as customer_routes } from "./router/auth_users.js";
+import { public_users as genl_routes } from "./router/general.js";
 
-const PORT = 5000;
+const PORT = 5001;
 
 const app = express();
 

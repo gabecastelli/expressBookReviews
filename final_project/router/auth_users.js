@@ -1,12 +1,12 @@
-import { express } from 'express';
-import { jwt } from 'jsonwebtoken';
-import { books } from './booksdb';
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import books from './booksdb.js';
 
-const regd_users = express.Router();
+export const regd_users = express.Router();
 
-let users = [];
+export let users = [];
 
-const isValid = (username) => {
+export const isValid = (username) => {
     //returns boolean
     //write code to check is the username is valid
 };
@@ -27,7 +27,3 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     //Write your code here
     return res.status(300).json({ message: "Yet to be implemented" });
 });
-
-module.exports.authenticated = regd_users;
-module.exports.isValid = isValid;
-module.exports.users = users;

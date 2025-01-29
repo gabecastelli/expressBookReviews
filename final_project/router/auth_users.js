@@ -69,7 +69,6 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     }
 
     matchingBook.reviews[username] = review;
-
     return res
         .status(200)
         .send(
@@ -77,4 +76,26 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
                 existingReview ? "updated" : "added"
             } for ${username}.`
         );
+});
+
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    const isbn = req.params.isbn;
+    const matchingBook = books[isbn];
+    const username = req.session.authorization.username;
+    const existingReview = matchingBook.reviews[username];
+
+    if (!isbn) {
+        return res.status(400).send("Bad request, missing ISBN.");
+    }
+
+    if (!matchingBook) {
+        return res.status(404).send(`Book with ISBN ${isbn} not found.`);
+    }
+
+    if (!existingReview) {
+        return res.status(404).send(`Review for book with ISBN ${isbn} not found for ${username}.`);
+    }
+
+    delete matchingBook.reviews[username];
+    return res.status(200).send(`Review for book with ISBN ${isbn} deleted for ${username}.`);
 });

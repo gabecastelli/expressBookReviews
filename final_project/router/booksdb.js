@@ -1,4 +1,4 @@
-const books = {
+export default {
     1: { author: "Chinua Achebe", title: "Things Fall Apart", reviews: {} },
     2: { author: "Hans Christian Andersen", title: "Fairy tales", reviews: {} },
     3: { author: "Dante Alighieri", title: "The Divine Comedy", reviews: {} },
@@ -17,6 +17,4 @@ const books = {
         title: "Molloy, Malone Dies, The Unnamable, the trilogy",
         reviews: {},
     },
-};
-
-export default books;
+}

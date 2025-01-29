@@ -8,18 +8,22 @@ const PORT = 5001;
 
 const app = express();
 
-app.use(express.json());
-app.use("/customer", customer_routes);
-app.use("/", genl_routes);
-
 app.use(
     "/customer",
     session({
         secret: "fingerprint_customer",
         resave: true,
         saveUninitialized: true,
+        cookie: { secure: false }
     })
 );
+
+app.use(express.json());
+
+app.use((req, res, next) => {
+    console.log("Middleware Check - Session:", req.session);
+    next();
+});
 
 app.use("/customer/auth/*", (req, res, next) => {
     if (!req.session.authorization) {
@@ -37,6 +41,9 @@ app.use("/customer/auth/*", (req, res, next) => {
         next();
     })
 });
+
+app.use("/customer", customer_routes);
+app.use("/", genl_routes);
 
 app.listen(PORT, () => console.log("Server is running"));
 

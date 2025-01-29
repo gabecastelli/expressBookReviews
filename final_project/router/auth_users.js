@@ -5,17 +5,11 @@ import books from "./booksdb.js";
 
 export const regd_users = express.Router();
 regd_users.use(express.json());
-regd_users.use(session({
-        secret: "fingerprint_customer",
-        resave: true,
-        saveUninitialized: true,
-    })
-);
 
 export let users = [];
 
 export function isValid(username) {
-    return !users.some((user) => user.username === username);
+    return users.some((user) => user.username === username);
 }
 
 function userIsAuthenticated(username, password) {
@@ -39,7 +33,7 @@ regd_users.post("/login", (req, res) => {
     // Generate token
     let accessToken = jwt.sign(
         {
-            data: password,
+            data: password
         },
         "access",
         { expiresIn: 60 * 60 }
@@ -47,14 +41,40 @@ regd_users.post("/login", (req, res) => {
 
     // Store token and username in session
     req.session.authorization = {
-        accessToken, username
+        accessToken,
+        username,
     };
 
-    return res.status(200).send(`User ${username} logged in successfuly.`);
+    return res.status(200).send(`User ${username} logged in successfully.`);
 });
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
-    // Write your code here
-    return res.status(300).json({ message: "Yet to be implemented" });
+    const isbn = req.params.isbn;
+    const review = req.body.review;
+    const matchingBook = books[isbn];
+    const username = req.session.authorization.username;
+    const existingReview = matchingBook.reviews[username];
+
+    if (!isbn) {
+        return res.status(400).send("Bad request, missing ISBN.");
+    }
+
+    if (!review) {
+        return res.status(400).send("Bad request, missing review.");
+    }
+
+    if (!matchingBook) {
+        return res.status(404).send(`Book with ISBN ${isbn} not found.`);
+    }
+
+    matchingBook.reviews[username] = review;
+
+    return res
+        .status(200)
+        .send(
+            `Review for book with ISBN ${isbn} ${
+                existingReview ? "updated" : "added"
+            } for ${username}.`
+        );
 });

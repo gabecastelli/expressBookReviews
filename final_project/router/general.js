@@ -61,11 +61,19 @@ public_users.get("/isbn/:isbn", async (req, res) => {
     }
 });
 
+async function getBooksFromAuthor(author) {
+    return new Promise(resolve => {
+        const matchingKeys = Object.keys(books).filter(key => books[key].author === author);
+        const matchingBooks = matchingKeys.reduce((acc, key) => books[key], []);
+
+        resolve(matchingBooks);
+    })
+}
+
 // Get book details based on author
-public_users.get("/author/:author", (req, res) => {
+public_users.get("/author/:author", async (req, res) => {
     const author = req.params.author;
-    const matchingKeys = Object.keys(books).filter(key => books[key].author === author);
-    const matchingBooks = matchingKeys.reduce((acc, key) => books[key], []);
+    const matchingBooks = await getBooksFromAuthor(author);
 
     if (!matchingBooks) {
         return res.status(404).send(`Books with author ${author} not found.`);

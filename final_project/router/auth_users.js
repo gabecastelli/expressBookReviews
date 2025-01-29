@@ -6,12 +6,12 @@ export const regd_users = express.Router();
 
 export let users = [];
 
-export const isValid = (username) => {
+export function isValid(username) {
     //returns boolean
     //write code to check is the username is valid
 };
 
-const authenticatedUser = (username, password) => {
+function userIsAuthenticated(username, password) {
     //returns boolean
     //write code to check if username and password match the one we have in records.
 };

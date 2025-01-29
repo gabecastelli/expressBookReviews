@@ -12,7 +12,7 @@ public_users.post("/register", (req, res) => {
         return res.status(400).send("Missing username or password.");
     }
 
-    if (users.some(user => user.username === username)) {
+    if (!isValid(username)) {
         return res.status(409).send(`Username ${username} already exists.`);
     }
 

@@ -9,6 +9,8 @@ const PORT = 5001;
 const app = express();
 
 app.use(express.json());
+app.use("/customer", customer_routes);
+app.use("/", genl_routes);
 
 app.use(
     "/customer",
@@ -35,9 +37,6 @@ app.use("/customer/auth/*", (req, res, next) => {
         next();
     })
 });
-
-app.use("/customer", customer_routes);
-app.use("/", genl_routes);
 
 app.listen(PORT, () => console.log("Server is running"));
 

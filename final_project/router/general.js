@@ -3,10 +3,21 @@ import books from "./booksdb.js";
 import { isValid, users } from "./auth_users.js";
 
 export const public_users = express.Router();
+public_users.use(express.json());
 
 public_users.post("/register", (req, res) => {
-    //Write your code here
-    return res.status(300).json({ message: "Yet to be implemented" });
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).send("Missing username or password.");
+    }
+
+    if (users.some(user => user.username === username)) {
+        return res.status(409).send(`Username ${username} already exists.`);
+    }
+
+    users.push({ "username": username, "password": password });
+    return res.status(200).send(`New user ${username} registered successfully.`);
 });
 
 // Get the book list available in the shop

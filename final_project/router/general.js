@@ -28,7 +28,7 @@ public_users.get("/", function (req, res) {
 // Get book details based on ISBN
 public_users.get("/isbn/:isbn", (req, res) => {
     const isbn = req.params.isbn;
-    const matchingBook = getBookFromISBN(books, isbn);
+    const matchingBook = books[isbn];
 
     if (!matchingBook) {
         return res.status(404).send(`Book with ISBN ${isbn} not found.`);
@@ -66,7 +66,7 @@ public_users.get("/title/:title", (req, res) => {
 //  Get book review
 public_users.get("/review/:isbn", (req, res) => {
     const isbn = req.params.isbn;
-    const matchingBook = getBookFromISBN(books, isbn);
+    const matchingBook = books[isbn];
 
     if (!matchingBook) {
         return res.status(404).send(`Book with ISBN ${isbn} not found.`);
@@ -74,9 +74,3 @@ public_users.get("/review/:isbn", (req, res) => {
 
     return res.status(200).send(JSON.stringify(matchingBook.reviews));
 });
-
-function getBookFromISBN(books, isbn) {
-    const matchingKey = Object.keys(books).find(key => books[key].isbn === isbn);
-    
-    return books[matchingKey];
-}

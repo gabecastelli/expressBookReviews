@@ -20,9 +20,13 @@ public_users.post("/register", (req, res) => {
     return res.status(200).send(`New user ${username} registered successfully.`);
 });
 
+async function getBooks() {
+    return await books;
+}
+
 // Get the book list available in the shop
-public_users.get("/", (req, res) => {
-    return res.status(200).send(JSON.stringify(books));
+public_users.get("/", async (req, res) => {
+    return res.status(200).send(JSON.stringify(await getBooks()));
 });
 
 // Get book details based on ISBN

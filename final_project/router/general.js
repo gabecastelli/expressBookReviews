@@ -20,19 +20,27 @@ public_users.post("/register", (req, res) => {
     return res.status(200).send(`New user ${username} registered successfully.`);
 });
 
+// Simulate database lookup
 async function getBooks() {
-    return await books;
+    return new Promise(resolve => {
+        resolve(books);
+    });
 }
 
 // Get the book list available in the shop
 public_users.get("/", async (req, res) => {
-    return res.status(200).send(JSON.stringify(await getBooks()));
+    try {
+        return res.status(200).send(JSON.stringify(await getBooks()));
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send(`Error fetching books.`);
+    }
 });
 
 // Get book details based on ISBN
-public_users.get("/isbn/:isbn", (req, res) => {
+public_users.get("/isbn/:isbn", async (req, res) => {
     const isbn = req.params.isbn;
-    const matchingBook = books[isbn];
+    const matchingBook = await getBooksFromISBN(isbn);
 
     if (!matchingBook) {
         return res.status(404).send(`Book with ISBN ${isbn} not found.`);
